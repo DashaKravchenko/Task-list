@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+	<main>
+    <div class="header">
+        <h3>Список заданий на сегодня</h3>
+  <div class="addCase"> <p>Добавить задание:</p> 
+    <input id="item" name="item" type="text" placeholder="Название задания">
+  </div>
+        <p>Всего заданий на сегодня: <span id="counter"></span></p>
+    </div>
+    <div class="row noneDisplay">
+        <div class="check"></div>
+        <div class="text"><span></span></div>
+        <div class="dlt"></div>
+        <div class="clear"></div>
+    </div>
+</main>
+
+  <p><button id="clear">Clear All</button> </p> 
+ 
+
+
+
+<script >
+
+
+// let user = {
+// 	name:'Elon',
+// 	age:48,
+// 	comp:[1,2],
+// 	obj:{name:'Reave', sname:'Musk'}
+// 	//toString(){return}
+// }
+// let json = JSON.stringify(user);
+// console.log(typeof(json));
+// console.log(json);
+
+// let dataUser = JSON.parse(json);
+// console.log(typeof(dataUser));
+// console.log(dataUser);
+// console.log(localStorage);
+
+// localStorage.setItem('key1', 'val1');
+// localStorage.setItem('user', 'json');
+// localStorage.removeItem('key1');
+//localStorage.clear();
+	
+// let str = localStorage.getItem('user');
+// console.log(str);
+// console.log(JSON.parse(str));
+
+
+
+
+
+
+
+
+
+
+
+let main= document.querySelector('main');
+let input = document.getElementById('item');
+
+let button = document.getElementById('clear');
+let counter = document.getElementById('counter');
+console.log(localStorage.getItem('items'))
+
+let itemsArray = localStorage.getItem('items') ? 
+	  JSON.parse(localStorage.getItem('items')) : [];
+
+let elem = document.querySelector('.row').cloneNode(true);
+
+const createItem = (task)=>{
+let itemElem = elem.cloneNode(true);
+itemElem.classList.remove('noneDisplay');
+let span = itemElem.children[1].children[0];
+span.innerHTML= task;
+//console.log(span);
+let dlt = itemElem.children[2];
+dlt.addEventListener('click', function(){
+	this.parentElement.remove();
+	itemsArray = JSON.parse(localStorage.getItem('items'));
+
+	for(let i=0; i<itemsArray.length; i++){
+	if(itemsArray[i]==task) itemsArray.splice(i, 1) ;
+	}
+	counter.innerHTML = itemsArray.length;
+	localStorage.setItem('items', JSON.stringify(itemsArray) );
+})
+main.append(itemElem);
+}
+//createItem('123');
+
+
+input.addEventListener('change', ()=>{
+itemsArray.push(input.value);
+localStorage.setItem('items', JSON.stringify(itemsArray));
+createItem(input.value);
+input.value = '';
+counter.innerHTML = itemsArray.length;
+
+})
+
+
+//itemsArray=['FIRST', 'SECOND'];
+button.addEventListener('click', ()=>{
+localStorage.clear();
+counter.innerHTML = 0;
+itemsArray = [];
+let rows = document.querySelectorAll('.row');
+for(let i=0; i<rows.length; i++){
+	rows[i].remove();
+}
+})
+
+for(let i=0; i<itemsArray.length; i++){
+createItem(itemsArray[i]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
